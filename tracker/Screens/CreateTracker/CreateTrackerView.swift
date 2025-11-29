@@ -6,7 +6,37 @@
 //
 import UIKit
 
+protocol CreateTrackerDelegate: AnyObject {
+    func didCreateTracker(_ tracker: Tracker)
+}
+
 class CreateTrackerView: UIViewController {
+    
+    weak var createViewDelegate: CreateTrackerDelegate?
+    
+    // - MARK: New tracker props
+    
+    private var trackerTitle = ""
+    private var trackerCategory: TrackerCategory? {
+        didSet {
+            selectCategoryButton.configuration?.subtitle = trackerCategory?.title
+            updateCreateButton()
+        }
+    }
+    private var trackerSchedule = [Int]() {
+        didSet {
+            if (trackerSchedule.count == 7) {
+                setScheduleButton.configuration?.subtitle = "Каждый день"
+            } else {
+                setScheduleButton.configuration?.subtitle = WeekDay.allCases.filter({ weekDay in
+                    return trackerSchedule.contains(weekDay.number)
+                }).map{ $0.rawValue }
+                .joined(separator: ", ")
+            }
+            updateCreateButton()
+            
+        }
+    }
     
     // - MARK: UI Elements
     
@@ -25,12 +55,14 @@ class CreateTrackerView: UIViewController {
         textField.leftView = padding
         textField.leftViewMode = .always
         
+        textField.addTarget(self, action: #selector(didNameEdit(_:)), for: .editingChanged)
+        
         return textField
     }()
     
     private lazy var separator = {
         let view = UIView()
-        view.backgroundColor = UIColor(named: "Grey")
+        view.backgroundColor = UIColor(named: "Gray")
         view.translatesAutoresizingMaskIntoConstraints = false
         view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         return view
@@ -50,61 +82,25 @@ class CreateTrackerView: UIViewController {
     }()
     
     private lazy var selectCategoryButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("Категория", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        button.setTitleColor(UIColor(named: "Black"), for: .normal)
-        
-        let detailTextLabel = UILabel()
-        detailTextLabel.font = UIFont.systemFont(ofSize: 17)
-        detailTextLabel.textColor = UIColor(named: "Grey")
-        detailTextLabel.text = "Важное"
-        
-        button.addSubview(detailTextLabel)
-        
-        let image = UIImage(systemName: "chevron.right")
-        let imageView = UIImageView(image: image)
-        button.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.rightAnchor.constraint(equalTo: button.rightAnchor, constant: -6).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
-        imageView.tintColor = UIColor(named: "Grey")
-        
-        button.titleLabel?.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
-        button.contentHorizontalAlignment = .fill
-
-        button.translatesAutoresizingMaskIntoConstraints = false
+        let button = getButton()
+        button.configuration?.attributedTitle = .init("Категория",
+                                                      attributes: AttributeContainer()
+                           .font(UIFont.systemFont(ofSize: 17))
+                           .foregroundColor(UIColor(named: "Black") ?? UIColor.black))
+        // button.addTarget(self, action: #selector(setCategoryTapped), for: .touchUpInside)
         
         return button
     }()
     
     private lazy var setScheduleButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("Расписание", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        button.setTitleColor(UIColor(named: "Black"), for: .normal)
+        let button = getButton()
         
-        let detailTextLabel = UILabel()
-        detailTextLabel.font = UIFont.systemFont(ofSize: 17)
-        detailTextLabel.textColor = UIColor(named: "Grey")
-        detailTextLabel.text = "Расписание"
-        
-        button.addSubview(detailTextLabel)
-        
-        let image = UIImage(systemName: "chevron.right")
-        let imageView = UIImageView(image: image)
-        button.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.rightAnchor.constraint(equalTo: button.rightAnchor, constant: -6).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
-        imageView.tintColor = UIColor(named: "Grey")
-        
-        button.titleLabel?.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
-        button.contentHorizontalAlignment = .fill
+        button.configuration?.attributedTitle = .init("Расписание",
+                                                      attributes: AttributeContainer()
+                           .font(UIFont.systemFont(ofSize: 17))
+                           .foregroundColor(UIColor(named: "Black") ?? UIColor.black))
         button.addTarget(self, action: #selector(setScheduleTapped), for: .touchUpInside)
 
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
         return button
     }()
     
@@ -129,9 +125,11 @@ class CreateTrackerView: UIViewController {
         
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Создать", for: .normal)
-        button.backgroundColor = UIColor(named: "Grey")
+        button.backgroundColor = UIColor(named: "Gray")
         button.layer.cornerRadius = 16
         button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        button.addTarget(self, action: #selector(didTapCreate), for: .touchUpInside)
         
         return button
     }()
@@ -164,6 +162,7 @@ class CreateTrackerView: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
         configure()
     }
     
@@ -202,16 +201,91 @@ class CreateTrackerView: UIViewController {
         ])
     }
     
+    private func getButton() -> UIButton {
+        var config = UIButton.Configuration.plain()
+        let image = UIImage(named: "Chevron")
+        config.image = image
+        config.imagePlacement = .trailing
+        config.titleAlignment = .leading
+        config.baseForegroundColor = UIColor(named: "Gray")
+        config.attributedSubtitle = .init("",
+                                       attributes: AttributeContainer()
+            .font(UIFont.systemFont(ofSize: 17))
+            .foregroundColor(UIColor(named: "Gray") ?? UIColor.black))
+        config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        config.buttonSize = .large
+        config.imagePadding = 16
+        
+        let button = UIButton(type: .custom)
+        button.contentHorizontalAlignment = .fill
+        button.configuration = config
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }
+    
+    private func updateCreateButton() {
+        // if trackerTitle != "" && trackerCategory != nil && trackerSchedule.count > 0 {
+        if trackerTitle != "" && trackerSchedule.count > 0 {
+            createTrackerButton.isEnabled = true
+            createTrackerButton.backgroundColor = UIColor(named: "Black")
+        } else {
+            createTrackerButton.isEnabled = false
+            createTrackerButton.backgroundColor = UIColor(named: "Gray")
+        }
+    }
+    
     @objc
     private func setScheduleTapped() {
-        let createVC = ScheduleView()
-        let nav = UINavigationController(rootViewController: createVC)
+        let scheduleVC = ScheduleView()
+        scheduleVC.setScheduleDelegate = self
+        scheduleVC.selectedDays = trackerSchedule
+        let nav = UINavigationController(rootViewController: scheduleVC)
+        nav.modalPresentationStyle = .formSheet
+        present(nav, animated: true)
+    }
+    
+    @objc
+    private func setCategoryTapped() {
+        let scheduleVC = CategoriesView()
+        scheduleVC.setCategoryDelegate = self
+        
+        let nav = UINavigationController(rootViewController: scheduleVC)
         nav.modalPresentationStyle = .formSheet
         present(nav, animated: true)
     }
 
     @objc
+    private func didTapCreate() {
+        let tracker = Tracker(id: UUID(),
+                              title: trackerTitle,
+                              color: UIColor(named: "Color selection \(Int.random(in: 1..<18))") ?? .gray,
+                              emoji: "🤏",
+                              schedule: trackerSchedule)
+        createViewDelegate?.didCreateTracker(tracker)
+        dismiss(animated: true)
+    }
+    
+    @objc
     private func cancelTapped() {
         dismiss(animated: true)
+    }
+    
+    @objc
+    private func didNameEdit(_ textField: UITextField) {
+        trackerTitle = textField.text ?? ""
+        updateCreateButton()
+    }
+}
+
+extension CreateTrackerView: SetScheduleDelegate {
+    func onSetSchedule(days: [Int]) {
+        trackerSchedule = days
+    }
+}
+
+extension CreateTrackerView: SetCategoryDelegate {
+    func onSetCategory(category: TrackerCategory) {
+        trackerCategory = category
     }
 }

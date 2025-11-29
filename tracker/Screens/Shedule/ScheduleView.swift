@@ -6,7 +6,15 @@
 //
 import UIKit
 
+protocol SetScheduleDelegate: AnyObject {
+    func onSetSchedule(days: [Int])
+}
+
 final class ScheduleView: UIViewController {
+    
+    weak var setScheduleDelegate: SetScheduleDelegate?
+    
+    var selectedDays: [Int] = []
     
     // - MARK: Elements
 
@@ -17,6 +25,7 @@ final class ScheduleView: UIViewController {
         tableView.showsVerticalScrollIndicator = false
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1)) // A small height is sufficient
         tableView.tableFooterView = footerView
+        tableView.layer.cornerRadius = 16
         tableView.allowsSelection = false
         
         return tableView
@@ -34,7 +43,9 @@ final class ScheduleView: UIViewController {
         return button
     }()
     
-    private var daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private var selectedDaysOfWeek = [String]()
+    
+    private var daysOfWeek = WeekDay.allCases
     
     // - MARK: Overrides
     
@@ -70,7 +81,20 @@ final class ScheduleView: UIViewController {
     }
     
     @objc
+    private func switchChanged(_ sender: UISwitch) {
+        let day = sender.tag
+        if sender.isOn {
+            if !selectedDays.contains(day) {
+                selectedDays.append(day)
+            }
+        } else {
+            selectedDays.removeAll { $0 == day }
+        }
+    }
+    
+    @objc
     private func readyButtonTapped() {
+        setScheduleDelegate?.onSetSchedule(days: selectedDays)
         dismiss(animated: true)
     }
 }
@@ -82,22 +106,10 @@ extension ScheduleView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ScheduleTableCell.init(style: .default, reuseIdentifier: "scheduleCell")
-        if (indexPath.row == 0) {
-            cell.layer.cornerRadius = 16
-            let sublayer = CALayer()
-            sublayer.frame = CGRect(x: 0, y: cell.frame.maxY + 16, width: tableView.frame.width, height: 16)
-            sublayer.backgroundColor = UIColor(named: "Background Solid")?.cgColor
-            cell.layer.addSublayer(sublayer)
-        }
-        
-        if (indexPath.row == daysOfWeek.count - 1) {
-            cell.layer.cornerRadius = 16
-            let sublayer = CALayer()
-            sublayer.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 16)
-            sublayer.backgroundColor = UIColor(named: "Background Solid")?.cgColor
-            cell.layer.addSublayer(sublayer)
-        }
-        cell.titleLabel.text = daysOfWeek[indexPath.row]
+        cell.titleLabel.text = WeekDay.name(calendarWeekday: WeekDay.allCases[indexPath.row].number)?.rawValue
+        cell.switcher.tag = WeekDay.allCases[indexPath.row].number
+        cell.switcher.isOn = selectedDays.contains(WeekDay.allCases[indexPath.row].number)
+        cell.switcher.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
         cell.backgroundColor = .background
         
         return cell
