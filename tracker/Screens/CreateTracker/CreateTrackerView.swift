@@ -30,7 +30,7 @@ class CreateTrackerView: UIViewController {
             } else {
                 setScheduleButton.configuration?.subtitle = WeekDay.allCases.filter({ weekDay in
                     return trackerSchedule.contains(weekDay.number)
-                }).map{ $0.rawValue }
+                }).map{ $0.shortName }
                 .joined(separator: ", ")
             }
             updateCreateButton()
@@ -143,7 +143,7 @@ class CreateTrackerView: UIViewController {
         let stack = UIStackView(arrangedSubviews: [nameTextField, parametersView, spacer, buttonsStack])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
-        stack.spacing = 16
+        stack.spacing = 24
         stack.distribution = .fill
         stack.isLayoutMarginsRelativeArrangement = true
         return stack

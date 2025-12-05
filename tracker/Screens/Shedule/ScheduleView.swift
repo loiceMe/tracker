@@ -23,10 +23,10 @@ final class ScheduleView: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.bouncesVertically = false
         tableView.showsVerticalScrollIndicator = false
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1)) // A small height is sufficient
-        tableView.tableFooterView = footerView
-        tableView.layer.cornerRadius = 16
         tableView.allowsSelection = false
+        tableView.clipsToBounds = true
+        tableView.tableHeaderView = UIView()
+        tableView.tableFooterView = UIView()
         
         return tableView
     }()
@@ -111,6 +111,19 @@ extension ScheduleView: UITableViewDataSource {
         cell.switcher.isOn = selectedDays.contains(WeekDay.allCases[indexPath.row].number)
         cell.switcher.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
         cell.backgroundColor = .background
+        
+        if (indexPath.row == 0) {
+            cell.separatorInset = .zero
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        }
+        
+        if (indexPath.row == daysOfWeek.count - 1) {
+            cell.separatorInset = .zero
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.separatorInset.left = UIScreen.main.bounds.width
+        }
         
         return cell
     }

@@ -41,6 +41,8 @@ class TrackerCell: UICollectionViewCell {
     private lazy var daysCounterLabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .black
         return label
     }()
     

@@ -44,6 +44,8 @@ final class TrackersView: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Что будем отслеживать?"
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .black
         return label
     }()
     
@@ -143,8 +145,8 @@ final class TrackersView: UIViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.placeholder = "Поиск"
-        searchController.searchBar.searchTextField.font = .systemFont(ofSize: 17, weight: .regular)
         searchController.searchBar.layer.cornerRadius = 10
+        searchController.searchBar.searchBarStyle = .minimal
         
         searchController.delegate = self
         navigationItem.searchController = searchController
