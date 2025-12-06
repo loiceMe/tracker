@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B30324762EE431D400E8B620 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = B30324752EE431D400E8B620 /* Swinject */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B38CC5A22E6B481F0058B020 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B30324762EE431D400E8B620 /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = tracker;
 			packageProductDependencies = (
+				B30324752EE431D400E8B620 /* Swinject */,
 			);
 			productName = tracker;
 			productReference = B38CC58B2E6B481E0058B020 /* tracker.app */;
@@ -208,6 +214,9 @@
 			);
 			mainGroup = B38CC5822E6B481E0058B020;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B30324742EE431D400E8B620 /* XCRemoteSwiftPackageReference "Swinject" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B38CC58C2E6B481E0058B020 /* Products */;
 			projectDirPath = "";
@@ -567,6 +576,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B30324742EE431D400E8B620 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B30324752EE431D400E8B620 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B30324742EE431D400E8B620 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B38CC5832E6B481E0058B020 /* Project object */;
 }

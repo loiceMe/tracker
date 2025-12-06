@@ -11,7 +11,7 @@ protocol CreateTrackerDelegate: AnyObject {
 }
 
 class CreateTrackerView: UIViewController {
-    
+    weak var delegate: CreateTrackerDelegate?
     private let emojis: [String] = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
@@ -36,7 +36,7 @@ class CreateTrackerView: UIViewController {
             } else {
                 setScheduleButton.configuration?.subtitle = WeekDay.allCases.filter({ weekDay in
                     return trackerSchedule.contains(weekDay.number)
-                }).map{ $0.rawValue }
+                }).map{ $0.shortName }
                 .joined(separator: ", ")
             }
             updateCreateButton()
@@ -115,13 +115,14 @@ class CreateTrackerView: UIViewController {
     private lazy var emojisTitleLabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Emoji"
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.text = "  Emoji"
+        label.font = UIFont.boldSystemFont(ofSize: 19)
         return label
     }()
     
     private lazy var emojiCollection = {
         let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 2.5, bottom: 0, right: 2.5)
         let collection = DynamicHeightCollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         
@@ -131,13 +132,14 @@ class CreateTrackerView: UIViewController {
     private lazy var colorsTitleLabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Цвет"
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.text = "  Цвет"
+        label.font = UIFont.boldSystemFont(ofSize: 19)
         return label
     }()
     
     private lazy var colorsCollection = {
         let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         let collection = DynamicHeightCollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
 
@@ -190,7 +192,8 @@ class CreateTrackerView: UIViewController {
         let stack = UIStackView(arrangedSubviews: [nameTextField, parametersView, emojisStack, colorsStack, spacer])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
-        stack.spacing = 16
+        stack.spacing = 36
+        stack.setCustomSpacing(24.0, after: nameTextField)
         stack.distribution = .fill
         stack.isLayoutMarginsRelativeArrangement = true
         return stack
@@ -198,19 +201,20 @@ class CreateTrackerView: UIViewController {
     
     private lazy var emojisStack = {
         let stack = UIStackView(arrangedSubviews: [emojisTitleLabel, emojiCollection])
-        stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.distribution = .fill
         stack.isLayoutMarginsRelativeArrangement = true
+        stack.setCustomSpacing(20.0, after: emojisTitleLabel)
         return stack
     }()
     
     private lazy var colorsStack = {
         let stack = UIStackView(arrangedSubviews: [colorsTitleLabel, colorsCollection])
-        stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.distribution = .fill
         stack.isLayoutMarginsRelativeArrangement = true
+        stack.setCustomSpacing(20.0, after: colorsTitleLabel)
+        colorsTitleLabel.layoutMargins = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 0)
         return stack
     }()
     
@@ -282,6 +286,7 @@ class CreateTrackerView: UIViewController {
             setScheduleButton.topAnchor.constraint(equalTo: separator.bottomAnchor),
             setScheduleButton.bottomAnchor.constraint(equalTo: parametersView.bottomAnchor),
             setScheduleButton.widthAnchor.constraint(equalTo: parametersView.widthAnchor, constant: -32),
+            
         ])
     }
     
@@ -309,14 +314,17 @@ class CreateTrackerView: UIViewController {
     }
     
     private func updateCreateButton() {
-        // if trackerTitle != "" && trackerCategory != nil && trackerSchedule.count > 0 {
-        if trackerTitle != "" && trackerSchedule.count > 0 {
+        if isAllowCreation() {
             createTrackerButton.isEnabled = true
             createTrackerButton.backgroundColor = UIColor(named: "Black")
         } else {
             createTrackerButton.isEnabled = false
             createTrackerButton.backgroundColor = UIColor(named: "Gray")
         }
+    }
+    
+    private func isAllowCreation() -> Bool {
+        return trackerTitle != "" && trackerSchedule.count > 0 && trackerEmoji != "" && trackerColor != ""
     }
     
     @objc
@@ -346,6 +354,8 @@ class CreateTrackerView: UIViewController {
                               color: UIColor(named: trackerColor) ?? .white,
                               emoji: trackerEmoji,
                               schedule: trackerSchedule)
+        
+        delegate?.didCreateTracker(tracker)
         createViewDelegate?.didCreateTracker(tracker)
         dismiss(animated: true)
     }
@@ -410,8 +420,12 @@ extension CreateTrackerView: UICollectionViewDelegate {
         switch collectionView {
         case emojiCollection:
             trackerEmoji = emojis[indexPath.row]
+            emojiCollection.reloadData()
+            updateCreateButton()
         case colorsCollection:
             trackerColor = "Color selection \(indexPath.row + 1)"
+            colorsCollection.reloadData()
+            updateCreateButton()
         default:
             break
         }
@@ -420,11 +434,16 @@ extension CreateTrackerView: UICollectionViewDelegate {
 
 extension CreateTrackerView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let itemSize = (collectionView.bounds.width - 60) / 6
+        let itemSize = (collectionView.bounds.width - 30) / 6
         return CGSize(width: itemSize, height: itemSize)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return 5
     }
 }

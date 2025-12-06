@@ -24,7 +24,7 @@ class TrackersSectionHeader: UICollectionReusableView {
         addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.leftAnchor.constraint(equalTo: leftAnchor),
+            titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 12),
             titleLabel.rightAnchor.constraint(equalTo: rightAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])

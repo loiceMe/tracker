@@ -23,25 +23,29 @@ class EmojiCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
+        contentView.layer.cornerRadius = 16
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(emojiLabel)
         setupConstraints()
+        
     }
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            emojiLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            emojiLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            emojiLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: widthAnchor),
+            contentView.heightAnchor.constraint(equalTo: heightAnchor),
+            
+            emojiLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            emojiLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
     
     func configure(with emoji: String, isSelected: Bool) {
         emojiLabel.text = emoji
         if isSelected {
-            
+            contentView.backgroundColor = UIColor(named: "Light Gray")
         } else {
-            
+            contentView.backgroundColor = UIColor.white
         }
     }
 }

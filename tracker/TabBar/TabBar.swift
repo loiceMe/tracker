@@ -17,8 +17,10 @@ final class TabBar: UITabBarController {
     }
     
     private func configure() {
-        // let trackersViewController = TrackersView()
-        let trackersViewController = CreateTrackerView()
+        let trackersViewController = TrackersView()
+        // let trackersViewController = CreateTrackerView()
+        addDivider()
+
         let trackersNavigation = UINavigationController(rootViewController: trackersViewController)
         trackersNavigation.tabBarItem = UITabBarItem(
             title: "Трекеры",
@@ -35,6 +37,14 @@ final class TabBar: UITabBarController {
         )
         
         viewControllers = [trackersNavigation, statsNavigation]
+    }
+    
+    private func addDivider() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.shadowColor = .gray
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
     }
 }
 
