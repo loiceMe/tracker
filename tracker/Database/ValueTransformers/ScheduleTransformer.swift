@@ -4,7 +4,7 @@
 //
 //  Created by   Дмитрий Кривенко on 03.12.2025.
 //
-import CoreData
+import Foundation
 
 @objc
 final class ScheduleTransformer: ValueTransformer {

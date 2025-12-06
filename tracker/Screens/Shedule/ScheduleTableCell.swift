@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class ScheduleTableCell: UITableViewCell {
+final class ScheduleTableCell: UITableViewCell {
     lazy var titleLabel = {
         let label = UILabel()
         label.text = "Вторник"

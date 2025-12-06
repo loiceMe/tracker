@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class DynamicHeightCollectionView: UICollectionView {
+final class DynamicHeightCollectionView: UICollectionView {
     override var intrinsicContentSize: CGSize {
         layoutIfNeeded()
         return contentSize

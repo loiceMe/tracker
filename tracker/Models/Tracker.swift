@@ -14,3 +14,11 @@ struct Tracker {
     let emoji: String
     let schedule: [Int]
 }
+
+enum MockData {
+    static let emojis: [String] = [
+        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
+        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+        "🥦", "🏓", "🥇", "🎸", "🏝", "😪",
+    ]
+}

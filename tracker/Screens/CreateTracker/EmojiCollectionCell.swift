@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class EmojiCollectionCell: UICollectionViewCell {
+final class EmojiCollectionCell: UICollectionViewCell {
     private lazy var emojiLabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -42,11 +42,7 @@ class EmojiCollectionCell: UICollectionViewCell {
     
     func configure(with emoji: String, isSelected: Bool) {
         emojiLabel.text = emoji
-        if isSelected {
-            contentView.backgroundColor = UIColor(named: "Light Gray")
-        } else {
-            contentView.backgroundColor = UIColor.white
-        }
+        contentView.backgroundColor = isSelected ? UIColor(named: "Light Gray") : UIColor.white
     }
 }
 

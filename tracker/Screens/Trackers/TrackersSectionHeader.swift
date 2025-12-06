@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TrackersSectionHeader: UICollectionReusableView {
+final class TrackersSectionHeader: UICollectionReusableView {
     static let reuseIdentifier = "TrackersSectionHeader"
     
     lazy var titleLabel = {

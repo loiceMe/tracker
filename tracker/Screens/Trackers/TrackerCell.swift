@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class TrackerCell: UICollectionViewCell {
+final class TrackerCell: UICollectionViewCell {
     // - MARK: Elements
     static let reuseIdentifier = "trackerCell"
     

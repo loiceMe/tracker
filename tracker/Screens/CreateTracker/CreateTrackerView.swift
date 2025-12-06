@@ -10,16 +10,14 @@ protocol CreateTrackerDelegate: AnyObject {
     func didCreateTracker(_ tracker: Tracker)
 }
 
-class CreateTrackerView: UIViewController {
+final class CreateTrackerView: UIViewController {
     weak var delegate: CreateTrackerDelegate?
-    private let emojis: [String] = [
-        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪",
-    ]
+    private let emojis = MockData.emojis
     
     weak var createViewDelegate: CreateTrackerDelegate?
-    
+    private var isAllowCreation: Bool {
+       trackerTitle != "" && trackerSchedule.count > 0 && trackerEmoji != "" && trackerColor != ""
+    }
     // - MARK: New tracker props
     
     private var trackerTitle = ""
@@ -314,17 +312,13 @@ class CreateTrackerView: UIViewController {
     }
     
     private func updateCreateButton() {
-        if isAllowCreation() {
+        if isAllowCreation {
             createTrackerButton.isEnabled = true
             createTrackerButton.backgroundColor = UIColor(named: "Black")
         } else {
             createTrackerButton.isEnabled = false
             createTrackerButton.backgroundColor = UIColor(named: "Gray")
         }
-    }
-    
-    private func isAllowCreation() -> Bool {
-        return trackerTitle != "" && trackerSchedule.count > 0 && trackerEmoji != "" && trackerColor != ""
     }
     
     @objc

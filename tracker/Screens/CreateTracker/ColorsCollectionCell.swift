@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class ColorsCollectionCell: UICollectionViewCell {
+final class ColorsCollectionCell: UICollectionViewCell {
     private lazy var selectedBackground = UIView()
     private lazy var colorView = UIView()
     

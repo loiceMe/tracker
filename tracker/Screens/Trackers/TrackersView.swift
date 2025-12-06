@@ -5,12 +5,11 @@
 //  Created by   Дмитрий Кривенко on 07.09.2025.
 //
 import UIKit
-import CoreData
 
 final class TrackersView: UIViewController {
-    let trackerCategoryStore = (UIApplication.shared.delegate as! AppDelegate).container.resolve(TrackerCategoryStore.self)
-    let trackerRecordStore = (UIApplication.shared.delegate as! AppDelegate).container.resolve(TrackerRecordStore.self)
-    let trackerStore = (UIApplication.shared.delegate as! AppDelegate).container.resolve(TrackerStore.self)
+    let trackerCategoryStore = (UIApplication.shared.delegate as? AppDelegate)?.container.resolve(TrackerCategoryStore.self)
+    let trackerRecordStore = (UIApplication.shared.delegate as? AppDelegate)?.container.resolve(TrackerRecordStore.self)
+    let trackerStore = (UIApplication.shared.delegate as? AppDelegate)?.container.resolve(TrackerStore.self)
     
     private var completedTrackers: Set<TrackerRecord> = [] {
         didSet {
@@ -87,7 +86,7 @@ final class TrackersView: UIViewController {
         super.viewDidLoad()
         configure()
         
-        categories = (try? trackerCategoryStore?.fetchAll()) as? [TrackerCategory] ?? []
+        categories = (try? trackerCategoryStore?.fetchAll()) ?? []
         completedTrackers = Set((try? trackerRecordStore?.fetchAll()) ?? [])
     }
     
@@ -182,11 +181,11 @@ final class TrackersView: UIViewController {
     
     private func filterTrackers() {
         let calendar = NSCalendar(calendarIdentifier: .gregorian)
-        let day = calendar!.component(.weekday, from: currentDate as Date)
+        let day = calendar?.component(.weekday, from: currentDate as Date)
         
         filteredCategories = categories.filter { category in
             category.trackers.contains { tracker in
-                return tracker.schedule.contains(day)
+                return tracker.schedule.contains(day ?? 1)
             }
         }
 
