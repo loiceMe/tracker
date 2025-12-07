@@ -18,7 +18,10 @@ final class TabBar: UITabBarController {
     
     private func configure() {
         let trackersViewController = TrackersView()
-        // let trackersViewController = CreateTrackerView()
+//        guard let categoriesStore = (UIApplication.shared.delegate as? AppDelegate)?.container.resolve(TrackerCategoryStore.self) else {
+//            return
+//        }
+//        let trackersViewController = CategoriesView(viewModel: CategoriesViewModel(store: categoriesStore))
         addDivider()
 
         let trackersNavigation = UINavigationController(rootViewController: trackersViewController)

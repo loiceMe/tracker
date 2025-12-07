@@ -82,6 +82,32 @@ final class TrackerCategoryStore: NSObject {
             return TrackerCategory(title: title, trackers: trackers)
         }
     }
+    
+    func createCategory(category: TrackerCategory) throws {
+        let newCategory = TrackerCategoryCoreData(context: context)
+        newCategory.title = category.title
+        try context.save()
+    }
+    
+    func update(oldTitle: String, newTitle: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", oldTitle)
+        request.fetchLimit = 1
+        if let category = try context.fetch(request).first {
+            category.title = newTitle
+            try context.save()
+        }
+    }
+    
+    func delete(title: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", title)
+        request.fetchLimit = 1
+        if let category = try context.fetch(request).first {
+            context.delete(category)
+            try context.save()
+        }
+    }
 }
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
