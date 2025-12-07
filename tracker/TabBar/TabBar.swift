@@ -17,9 +17,10 @@ final class TabBar: UITabBarController {
     }
     
     private func configure() {
-        addDivider()
-        
         let trackersViewController = TrackersView()
+        // let trackersViewController = CreateTrackerView()
+        addDivider()
+
         let trackersNavigation = UINavigationController(rootViewController: trackersViewController)
         trackersNavigation.tabBarItem = UITabBarItem(
             title: "Трекеры",

@@ -61,19 +61,19 @@ final class CategoriesView: UIViewController {
 
 extension CategoriesView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        setCategoryDelegate?.onSetCategory(category: FakeCategories[indexPath.row])
+        setCategoryDelegate?.onSetCategory(category: TrackerCategory(title: "", trackers: []))
         dismiss(animated: true)
     }
 }
 
 extension CategoriesView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FakeCategories.count
+        return [].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = CategoriesTableCell.init(style: .default, reuseIdentifier: "categoryCell")
-        cell.titleLabel.text = FakeCategories[indexPath.row].title
+        cell.titleLabel.text = ""
         cell.backgroundColor = .background
         
         return cell

@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class CategoriesTableCell: UITableViewCell {
+final class CategoriesTableCell: UITableViewCell {
     lazy var titleLabel = {
         let label = UILabel()
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
