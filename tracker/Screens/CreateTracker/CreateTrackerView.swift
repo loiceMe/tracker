@@ -7,7 +7,7 @@
 import UIKit
 
 protocol CreateTrackerDelegate: AnyObject {
-    func didCreateTracker(_ tracker: Tracker)
+    func didCreateTracker(_ tracker: Tracker, categoryTitle: String?)
 }
 
 final class CreateTrackerView: UIViewController {
@@ -16,7 +16,7 @@ final class CreateTrackerView: UIViewController {
     
     weak var createViewDelegate: CreateTrackerDelegate?
     private var isAllowCreation: Bool {
-       trackerTitle != "" && trackerSchedule.count > 0 && trackerEmoji != "" && trackerColor != ""
+        trackerTitle != "" && trackerSchedule.count > 0 && trackerEmoji != "" && trackerColor != "" && trackerCategory != nil
     }
     // - MARK: New tracker props
     
@@ -93,7 +93,7 @@ final class CreateTrackerView: UIViewController {
                                                       attributes: AttributeContainer()
                            .font(UIFont.systemFont(ofSize: 17))
                            .foregroundColor(UIColor(named: "Black") ?? UIColor.black))
-        // button.addTarget(self, action: #selector(setCategoryTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(setCategoryTapped), for: .touchUpInside)
         
         return button
     }()
@@ -333,10 +333,14 @@ final class CreateTrackerView: UIViewController {
     
     @objc
     private func setCategoryTapped() {
-        let scheduleVC = CategoriesView()
-        scheduleVC.setCategoryDelegate = self
+        guard let categoriesStore = (UIApplication.shared.delegate as? AppDelegate)?.container.resolve(TrackerCategoryStore.self) else {
+            return
+        }
+        let viewModel = CategoriesViewModel(store: categoriesStore)
+        viewModel.setCategoryDelegate = self
+        let categoriesView = CategoriesView(viewModel: viewModel)
         
-        let nav = UINavigationController(rootViewController: scheduleVC)
+        let nav = UINavigationController(rootViewController: categoriesView)
         nav.modalPresentationStyle = .formSheet
         present(nav, animated: true)
     }
@@ -348,9 +352,8 @@ final class CreateTrackerView: UIViewController {
                               color: UIColor(named: trackerColor) ?? .white,
                               emoji: trackerEmoji,
                               schedule: trackerSchedule)
-        
-        delegate?.didCreateTracker(tracker)
-        createViewDelegate?.didCreateTracker(tracker)
+        delegate?.didCreateTracker(tracker, categoryTitle: trackerCategory?.title)
+        createViewDelegate?.didCreateTracker(tracker, categoryTitle: trackerCategory?.title)
         dismiss(animated: true)
     }
     
@@ -373,7 +376,7 @@ extension CreateTrackerView: SetScheduleDelegate {
 }
 
 extension CreateTrackerView: SetCategoryDelegate {
-    func onSetCategory(category: TrackerCategory) {
+    func onSetCategory(category: TrackerCategory?) {
         trackerCategory = category
     }
 }

@@ -183,11 +183,19 @@ final class TrackersView: UIViewController {
         let calendar = NSCalendar(calendarIdentifier: .gregorian)
         let day = calendar?.component(.weekday, from: currentDate as Date)
         
-        filteredCategories = categories.filter { category in
+        let neededCategories = categories.filter { category in
             category.trackers.contains { tracker in
                 return tracker.schedule.contains(day ?? 1)
             }
         }
+        
+        filteredCategories = neededCategories.map({ category in
+            let filteredTrackers = category.trackers.filter({ tracker in
+                return tracker.schedule.contains(day ?? 1)
+            })
+            return TrackerCategory(title: category.title,
+                                   trackers: filteredTrackers)
+        })
 
         trackersCollectionView.reloadData()
     }
@@ -208,8 +216,8 @@ final class TrackersView: UIViewController {
 }
 
 extension TrackersView: CreateTrackerDelegate {
-    func didCreateTracker(_ tracker: Tracker) {
-        try? trackerStore?.create(tracker, in: "Без категории")
+    func didCreateTracker(_ tracker: Tracker, categoryTitle: String?) {
+        try? trackerStore?.create(tracker, in: categoryTitle ?? "Без категории")
     }
 }
 
