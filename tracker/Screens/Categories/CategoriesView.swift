@@ -40,8 +40,9 @@ final class CategoriesView: UIViewController {
     private lazy var addCategoryButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Добавить категорию", for: .normal)
-        button.backgroundColor = .black
+        button.setTitle(NSLocalizedString("add_category", comment: ""), for: .normal)
+        button.backgroundColor = .ypBlack
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
         button.setContentHuggingPriority(.defaultHigh, for: .vertical)
         button.addTarget(self, action: #selector(addCategoryButtonTapped), for: .touchUpInside)
@@ -74,8 +75,8 @@ final class CategoriesView: UIViewController {
         view.addSubview(categoriesTable)
         view.addSubview(addCategoryButton)
         
-        navigationItem.title = "Категория"
-        view.backgroundColor = UIColor(named: "White")
+        navigationItem.title = NSLocalizedString("category", comment: "")
+        view.backgroundColor = .ypWhite
         
         categoriesTable.dataSource = self
         categoriesTable.delegate = self
@@ -89,7 +90,7 @@ final class CategoriesView: UIViewController {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            categoriesTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            categoriesTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             categoriesTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             categoriesTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             categoriesTable.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -39),
@@ -103,10 +104,10 @@ final class CategoriesView: UIViewController {
     
     private func presentDeleteConfirmation(for title: String, sourceRect: CGRect, in sourceView: UIView) {
         let alert = UIAlertController(title: nil,
-                                      message: "Эта категория точно не нужна?",
+                                      message: NSLocalizedString("delete_category_confirm", comment: ""),
                                       preferredStyle: .actionSheet)
 
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let deleteAction = UIAlertAction(title: NSLocalizedString("delete_button", comment: ""), style: .destructive) { [weak self] _ in
             self?.viewModel?.delete(title: title)
         }
         let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
@@ -119,10 +120,13 @@ final class CategoriesView: UIViewController {
     @objc
     private func addCategoryButtonTapped() {
         let vc = CategoryView(mode: .create)
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .formSheet
+
         vc.onDidCreate = { [weak self] title in
             self?.viewModel?.create(title: title)
         }
-        self.present(vc, animated: true)
+        present(nav, animated: true)
     }
     
     @objc
@@ -134,11 +138,15 @@ final class CategoriesView: UIViewController {
         let category = viewModel?.category(by: indexPath.row)
         let title = category?.title ?? ""
 
+        guard let cell = categoriesTable.cellForRow(at: indexPath) as? CategoriesTableCell else { return }
         let cellRect = categoriesTable.rectForRow(at: indexPath)
         let cellRectInTable = categoriesTable.convert(cellRect, to: view)
         let cellRectInWindow = view.convert(cellRectInTable, to: nil)
 
-        let menu = CategoryContextMenuController(categoryTitle: title, anchorFrameInWindow: cellRectInWindow)
+        let menu = ContextMenuController.init(title: title,
+                                              mode: .category,
+                                              anchorFrameInWindow: cellRectInWindow,
+                                              previewView: cell)
 
         menu.onEdit = { [weak self] in
             let vc = CategoryView(mode: .edit(originalTitle: title))
@@ -181,7 +189,7 @@ extension CategoriesView: UITableViewDataSource {
             let isSelected = viewModel?.isSelected(index: indexPath.row)
         else { return cell }
         cell.configure(with: category, isSelected: isSelected)
-        cell.backgroundColor = .background
+        cell.backgroundColor = .ypBackground
         
         if (indexPath.row == 0) {
             cell.separatorInset = .zero
@@ -189,11 +197,15 @@ extension CategoriesView: UITableViewDataSource {
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         }
         
-        if (indexPath.row == viewModel?.categoriesCount) {
+        if (indexPath.row == (viewModel?.categoriesCount ?? 1) - 1) {
             cell.separatorInset = .zero
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             cell.separatorInset.left = UIScreen.main.bounds.width
+        }
+        
+        if viewModel?.categoriesCount == 1 {
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner, .layerMaxXMinYCorner]
         }
         
         return cell

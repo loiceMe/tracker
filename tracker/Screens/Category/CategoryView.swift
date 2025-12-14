@@ -31,8 +31,8 @@ final class CategoryView: UIViewController {
     
     private let nameField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
-        textField.backgroundColor = UIColor(named: "Background")
+        textField.backgroundColor = .ypBackground
+        textField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("enter_name_category", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor.ypGray])
         textField.layer.cornerRadius = 16
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -51,33 +51,30 @@ final class CategoryView: UIViewController {
         
         var config = UIButton.Configuration.plain()
         config.contentInsets = NSDirectionalEdgeInsets(top: 19, leading: 32, bottom: 19, trailing: 32)
-        
-        button.setTitle("Готово", for: .normal)
-        button.setTitleColor(UIColor(named: "White"), for: .normal)
-        button.setTitleColor(UIColor(named: "White"), for: .disabled)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        config.title = NSLocalizedString("ready", comment: "")
         button.configuration = config
-        button.backgroundColor = UIColor(named: "Gray")
+        button.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        button.backgroundColor = .ypGray
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.configuration?.baseForegroundColor = .white
         button.isEnabled = false
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "White")
+        view.backgroundColor = .ypWhite
         
         switch mode {
         case .create:
-            navigationItem.title = "Новая категория"
+            navigationItem.title = NSLocalizedString("new_category", comment: "")
         case .edit(let originalTitle):
             navigationItem.title = "Редактирование категории"
             nameField.text = originalTitle
-            createButton.isEnabled = true
-            createButton.backgroundColor = UIColor(named: "Black")
         }
         
+        nameFieldChanged()
         nameField.addTarget(self, action: #selector(nameFieldChanged), for: .editingChanged)
         createButton.addTarget(self, action: #selector(primaryTapped), for: .touchUpInside)
         configureLayout()
@@ -103,7 +100,8 @@ final class CategoryView: UIViewController {
     private func nameFieldChanged() {
         let nameIsEmpty = nameField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
         createButton.isEnabled = !nameIsEmpty
-        createButton.backgroundColor = createButton.isEnabled ? UIColor(named: "Black") : UIColor(named: "Gray")
+        createButton.backgroundColor = createButton.isEnabled ? .ypBlack : .ypGray
+        createButton.configuration?.baseForegroundColor = createButton.isEnabled ? .ypWhite : .white
     }
     
     @objc

@@ -8,17 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		B30324762EE431D400E8B620 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = B30324752EE431D400E8B620 /* Swinject */; };
+		B30326AC2EEDFB4D00E8B620 /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = B30326AB2EEDFB4D00E8B620 /* AppMetricaCore */; };
+		B30326B82EEE01AA00E8B620 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = B30326B72EEE01AA00E8B620 /* SnapshotTesting */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		B38CC5A22E6B481F0058B020 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B38CC5832E6B481E0058B020 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B38CC58A2E6B481E0058B020;
-			remoteInfo = tracker;
-		};
-		B38CC5AC2E6B481F0058B020 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B38CC5832E6B481E0058B020 /* Project object */;
 			proxyType = 1;
@@ -30,7 +25,7 @@
 /* Begin PBXFileReference section */
 		B38CC58B2E6B481E0058B020 /* tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B38CC5A12E6B481F0058B020 /* trackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B38CC5AB2E6B481F0058B020 /* trackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3B14B5A2EEE75AA008C5935 /* tracker.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = tracker.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -57,11 +52,6 @@
 			path = trackerTests;
 			sourceTree = "<group>";
 		};
-		B38CC5AE2E6B481F0058B020 /* trackerUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = trackerUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B30324762EE431D400E8B620 /* Swinject in Frameworks */,
+				B30326AC2EEDFB4D00E8B620 /* AppMetricaCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,13 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B38CC5A82E6B481F0058B020 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				B30326B82EEE01AA00E8B620 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,9 +78,9 @@
 		B38CC5822E6B481E0058B020 = {
 			isa = PBXGroup;
 			children = (
+				B3B14B5A2EEE75AA008C5935 /* tracker.xctestplan */,
 				B38CC58D2E6B481E0058B020 /* tracker */,
 				B38CC5A42E6B481F0058B020 /* trackerTests */,
-				B38CC5AE2E6B481F0058B020 /* trackerUITests */,
 				B38CC58C2E6B481E0058B020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -105,7 +90,6 @@
 			children = (
 				B38CC58B2E6B481E0058B020 /* tracker.app */,
 				B38CC5A12E6B481F0058B020 /* trackerTests.xctest */,
-				B38CC5AB2E6B481F0058B020 /* trackerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,6 +115,7 @@
 			name = tracker;
 			packageProductDependencies = (
 				B30324752EE431D400E8B620 /* Swinject */,
+				B30326AB2EEDFB4D00E8B620 /* AppMetricaCore */,
 			);
 			productName = tracker;
 			productReference = B38CC58B2E6B481E0058B020 /* tracker.app */;
@@ -154,33 +139,11 @@
 			);
 			name = trackerTests;
 			packageProductDependencies = (
+				B30326B72EEE01AA00E8B620 /* SnapshotTesting */,
 			);
 			productName = trackerTests;
 			productReference = B38CC5A12E6B481F0058B020 /* trackerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		B38CC5AA2E6B481F0058B020 /* trackerUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B38CC5BC2E6B481F0058B020 /* Build configuration list for PBXNativeTarget "trackerUITests" */;
-			buildPhases = (
-				B38CC5A72E6B481F0058B020 /* Sources */,
-				B38CC5A82E6B481F0058B020 /* Frameworks */,
-				B38CC5A92E6B481F0058B020 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B38CC5AD2E6B481F0058B020 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				B38CC5AE2E6B481F0058B020 /* trackerUITests */,
-			);
-			name = trackerUITests;
-			packageProductDependencies = (
-			);
-			productName = trackerUITests;
-			productReference = B38CC5AB2E6B481F0058B020 /* trackerUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -199,10 +162,6 @@
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = B38CC58A2E6B481E0058B020;
 					};
-					B38CC5AA2E6B481F0058B020 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = B38CC58A2E6B481E0058B020;
-					};
 				};
 			};
 			buildConfigurationList = B38CC5862E6B481E0058B020 /* Build configuration list for PBXProject "tracker" */;
@@ -211,11 +170,14 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = B38CC5822E6B481E0058B020;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				B30324742EE431D400E8B620 /* XCRemoteSwiftPackageReference "Swinject" */,
+				B30326AA2EEDFB4D00E8B620 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
+				B30326B62EEE01AA00E8B620 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B38CC58C2E6B481E0058B020 /* Products */;
@@ -224,7 +186,6 @@
 			targets = (
 				B38CC58A2E6B481E0058B020 /* tracker */,
 				B38CC5A02E6B481F0058B020 /* trackerTests */,
-				B38CC5AA2E6B481F0058B020 /* trackerUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -238,13 +199,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B38CC59F2E6B481F0058B020 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B38CC5A92E6B481F0058B020 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -268,13 +222,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B38CC5A72E6B481F0058B020 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -282,11 +229,6 @@
 			isa = PBXTargetDependency;
 			target = B38CC58A2E6B481E0058B020 /* tracker */;
 			targetProxy = B38CC5A22E6B481F0058B020 /* PBXContainerItemProxy */;
-		};
-		B38CC5AD2E6B481F0058B020 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B38CC58A2E6B481E0058B020 /* tracker */;
-			targetProxy = B38CC5AC2E6B481F0058B020 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -472,7 +414,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RY49V76AN4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.practicum.trackerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -491,7 +433,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RY49V76AN4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.practicum.trackerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -499,40 +441,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/tracker";
-			};
-			name = Release;
-		};
-		B38CC5BD2E6B481F0058B020 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RY49V76AN4;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.practicum.trackerUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = tracker;
-			};
-			name = Debug;
-		};
-		B38CC5BE2E6B481F0058B020 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RY49V76AN4;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.practicum.trackerUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = tracker;
 			};
 			name = Release;
 		};
@@ -566,15 +474,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B38CC5BC2E6B481F0058B020 /* Build configuration list for PBXNativeTarget "trackerUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B38CC5BD2E6B481F0058B020 /* Debug */,
-				B38CC5BE2E6B481F0058B020 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -586,6 +485,22 @@
 				minimumVersion = 2.10.0;
 			};
 		};
+		B30326AA2EEDFB4D00E8B620 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appmetrica/appmetrica-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.15.0;
+			};
+		};
+		B30326B62EEE01AA00E8B620 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.7;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -593,6 +508,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B30324742EE431D400E8B620 /* XCRemoteSwiftPackageReference "Swinject" */;
 			productName = Swinject;
+		};
+		B30326AB2EEDFB4D00E8B620 /* AppMetricaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B30326AA2EEDFB4D00E8B620 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCore;
+		};
+		B30326B72EEE01AA00E8B620 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B30326B62EEE01AA00E8B620 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

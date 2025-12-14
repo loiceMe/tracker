@@ -12,6 +12,7 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
+    
     let container: Container = {
         ScheduleTransformer.register()
         var persistentContainer = NSPersistentContainer(name: "Tracker")

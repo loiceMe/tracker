@@ -27,7 +27,7 @@ final class OnboardingView: UIPageViewController {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
-        pageControl.currentPageIndicatorTintColor = .black
+        pageControl.currentPageIndicatorTintColor = .ypBlack
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
@@ -38,8 +38,8 @@ final class OnboardingView: UIPageViewController {
         
         var config = UIButton.Configuration.filled()
         config.title = "Вот это технологии!"
-        config.baseBackgroundColor = .black
-        config.baseForegroundColor = .white
+        config.baseBackgroundColor = .ypBlack
+        config.baseForegroundColor = .ypWhite
         config.contentInsets = NSDirectionalEdgeInsets(top: 19, leading: 32, bottom: 19, trailing: 32)
         config.background.cornerRadius = 16
         

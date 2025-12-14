@@ -63,6 +63,19 @@ final class TrackerRecordStore: NSObject {
             try context.save()
         }
     }
+    
+    func delete(by trackerId: UUID) throws {
+        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "tracker.id == %@",
+            trackerId as CVarArg
+        )
+
+        if let trackerRecordCoreData = try context.fetch(fetchRequest).first {
+            context.delete(trackerRecordCoreData)
+            try context.save()
+        }
+    }
 
     func fetchAll() throws -> [TrackerRecord] {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
@@ -83,6 +96,11 @@ final class TrackerRecordStore: NSObject {
 
     private func startOfDay(_ date: Date) -> Date {
         Calendar.current.startOfDay(for: date)
+    }
+    
+    func totalCompletedCount() throws -> Int {
+        let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        return try context.count(for: request)
     }
 }
 

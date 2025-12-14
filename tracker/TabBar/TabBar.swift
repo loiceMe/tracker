@@ -18,15 +18,11 @@ final class TabBar: UITabBarController {
     
     private func configure() {
         let trackersViewController = TrackersView()
-//        guard let categoriesStore = (UIApplication.shared.delegate as? AppDelegate)?.container.resolve(TrackerCategoryStore.self) else {
-//            return
-//        }
-//        let trackersViewController = CategoriesView(viewModel: CategoriesViewModel(store: categoriesStore))
         addDivider()
 
         let trackersNavigation = UINavigationController(rootViewController: trackersViewController)
         trackersNavigation.tabBarItem = UITabBarItem(
-            title: "Трекеры",
+            title: NSLocalizedString("trackers", comment: ""),
             image: UIImage(systemName: "record.circle.fill"),
             selectedImage: nil
         )
@@ -34,7 +30,7 @@ final class TabBar: UITabBarController {
         let statsViewController = StatisticView()
         let statsNavigation = UINavigationController(rootViewController: statsViewController)
         statsNavigation.tabBarItem = UITabBarItem(
-            title: "Статистика",
+            title: NSLocalizedString("statistic", comment: ""),
             image: UIImage(systemName: "hare.fill"),
             selectedImage: nil
         )
