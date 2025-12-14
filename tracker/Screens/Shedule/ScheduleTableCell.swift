@@ -18,7 +18,7 @@ final class ScheduleTableCell: UITableViewCell {
     lazy var switcher = {
         let switcher = UISwitch()
         switcher.translatesAutoresizingMaskIntoConstraints = false
-        switcher.onTintColor = UIColor(named: "Blue")
+        switcher.onTintColor = .ypBlue
         return switcher
     }()
     

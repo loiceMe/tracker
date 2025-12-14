@@ -6,31 +6,62 @@
 //
 
 import XCTest
+import SnapshotTesting
 @testable import tracker
+import CoreData
+import Swinject
 
 final class trackerTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    override func setUp() {
+        super.setUp()
+        UIView.setAnimationsEnabled(false)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override func tearDown() {
+        UIView.setAnimationsEnabled(true)
+        super.tearDown()
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    private func makeMainScreen() -> UIViewController {
+        let container = TestCoreDataStack.makeInMemoryContainer()
+        let context = container.viewContext
+
+        let trackerStore = TrackerStore(context: context)
+        let categoryStore = TrackerCategoryStore(context: context)
+        let recordStore = TrackerRecordStore(context: context)
+
+        let root = TrackersView()
+        let nav = UINavigationController(rootViewController: root)
+        nav.loadViewIfNeeded()
+        return nav
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func test_mainScreen_light() {
+        let vc = makeMainScreen()
+
+        let traits = UITraitCollection { t in
+            t.userInterfaceStyle = .light
+        }
+        withSnapshotTesting(record: false) {
+            assertSnapshot(
+                of: vc,
+                as: .image(traits: traits)
+            )
         }
     }
+    
+    func test_mainScreen_dark() {
+        let vc = makeMainScreen()
 
+        let traits = UITraitCollection { t in
+            t.userInterfaceStyle = .dark
+        }
+        withSnapshotTesting(record: false) {
+            assertSnapshot(
+                of: vc,
+                as: .image(traits: traits)
+            )
+        }
+    }
 }

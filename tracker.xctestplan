@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "3E6B0A41-4361-432A-B775-9FC5CEED83DD",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:tracker.xcodeproj",
+      "identifier" : "B38CC58A2E6B481E0058B020",
+      "name" : "tracker"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:tracker.xcodeproj",
+        "identifier" : "B38CC5A02E6B481F0058B020",
+        "name" : "trackerTests"
+      }
+    }
+  ],
+  "version" : 1
+}

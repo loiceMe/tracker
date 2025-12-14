@@ -34,8 +34,9 @@ final class ScheduleView: UIViewController {
     private lazy var readyButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Готово", for: .normal)
-        button.backgroundColor = .black
+        button.setTitle(NSLocalizedString("ready", comment: ""), for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
         button.setContentHuggingPriority(.defaultHigh, for: .vertical)
         button.addTarget(self, action: #selector(readyButtonTapped), for: .touchUpInside)
@@ -58,8 +59,8 @@ final class ScheduleView: UIViewController {
         view.addSubview(scheduleTable)
         view.addSubview(readyButton)
         
-        navigationItem.title = "Расписание"
-        view.backgroundColor = UIColor(named: "White")
+        navigationItem.title = NSLocalizedString("schedule", comment: "")
+        view.backgroundColor = .ypWhite
         
         scheduleTable.dataSource = self
         
@@ -68,7 +69,7 @@ final class ScheduleView: UIViewController {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            scheduleTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scheduleTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             scheduleTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             scheduleTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             scheduleTable.bottomAnchor.constraint(equalTo: readyButton.topAnchor, constant: -39),
@@ -110,7 +111,7 @@ extension ScheduleView: UITableViewDataSource {
         cell.switcher.tag = WeekDay.allCases[indexPath.row].number
         cell.switcher.isOn = selectedDays.contains(WeekDay.allCases[indexPath.row].number)
         cell.switcher.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
-        cell.backgroundColor = .background
+        cell.backgroundColor = .ypBackground
         
         if (indexPath.row == 0) {
             cell.separatorInset = .zero

@@ -16,7 +16,7 @@ final class TrackerCell: UICollectionViewCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 12
-        view.backgroundColor = UIColor(named: "Emoji Background")
+        view.backgroundColor = UIColor.ypEmojiBackground
         view.addSubview(emojiLabel)
         return view
     }()
@@ -42,7 +42,7 @@ final class TrackerCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = .black
+        label.textColor = .ypBlack
         return label
     }()
     
@@ -55,7 +55,7 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
-    private lazy var topView = {
+    lazy var topView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 16
@@ -92,7 +92,7 @@ final class TrackerCell: UICollectionViewCell {
             systemName: iconName,
             withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .medium)
         )
-        daysCounterLabel.text = "\(count) \(pluralizeDay(count))"
+        daysCounterLabel.text = localizedDays(count)
         addDayButton.setImage(image, for: .normal)
         addDayButton.tintColor = .white
         addDayButton.backgroundColor =  tracker.color
@@ -141,15 +141,9 @@ final class TrackerCell: UICollectionViewCell {
         ])
     }
     
-    private func pluralizeDay(_ count: Int) -> String {
-        let rem10 = count % 10
-        let rem100 = count % 100
-        if rem100 >= 11 && rem100 <= 14 { return "дней" }
-        switch rem10 {
-            case 1: return "день"
-            case 2...4: return "дня"
-            default: return "дней"
-        }
+    private func localizedDays(_ count: Int) -> String {
+        let format = NSLocalizedString("days_count", comment: "Plural form for days")
+        return String.localizedStringWithFormat(format, count)
     }
     
     @objc

@@ -12,6 +12,10 @@ protocol TrackerStoreDelegate: AnyObject {
     func trackerStoreDidChange(_ store: TrackerStore)
 }
 
+enum TrackerStoreError: Error {
+    case notFound
+}
+
 final class TrackerStore: NSObject {
     weak var delegate: TrackerStoreDelegate?
     private let context: NSManagedObjectContext
@@ -52,7 +56,33 @@ final class TrackerStore: NSObject {
 
         try context.save()
     }
+    
+    func update(_ tracker: Tracker, toCategoryTitle newCategoryTitle: String) throws {
+        try context.performAndWait {
+            guard let cd = try fetchTracker(by: tracker.id) else {
+                throw TrackerStoreError.notFound
+            }
 
+            cd.title = tracker.title
+            cd.emoji = tracker.emoji
+            cd.color = tracker.color.hexString
+            cd.schedule = tracker.schedule as NSObject
+            
+            if cd.category?.title != newCategoryTitle {
+                let newCategory = try fetchOrCreateCategory(with: newCategoryTitle)
+                cd.category = newCategory
+            }
+            try context.save()
+        }
+    }
+    
+    func delete(_ tracker: Tracker) throws {
+        try context.performAndWait {
+            guard let cd = try fetchTracker(by: tracker.id) else { throw TrackerStoreError.notFound }
+            context.delete(cd)
+            try context.save()
+        }
+    }
 
     func fetchAll() throws -> [Tracker] {
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
@@ -101,6 +131,13 @@ final class TrackerStore: NSObject {
         WeekDay.allCases.enumerated().compactMap { index, day in
             (mask & (1 << Int16(index))) != 0 ? day : nil
         }
+    }
+    
+    private func fetchTracker(by id: UUID) throws -> TrackerCoreData? {
+        let req: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        req.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        req.fetchLimit = 1
+        return try context.fetch(req).first
     }
 }
 
